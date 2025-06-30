@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enderyn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="icon" href="SkyBlock_items_enchanted_eye_of_ender.gif" type="image/gif">
+  <style>
+    body {
+      margin: 0;
+      color: #fff; /* Ender purple changed to white */
+      font-family: 'Press Start 2P', 'VT323', monospace;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background-color: #000;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      cursor: url('5152153369.png'), auto;
+    }
+    h1 {
+      font-size: 4rem;
+      text-shadow: 0 0 20px #fff;
+      animation: floatH1 3.5s ease-in-out infinite alternate;
+    }
+    p {
+      font-size: 1.5rem;
+      margin: 1rem 0 2rem;
+    }
+    a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.5rem 0.8rem;
+      color: #000;
+      text-decoration: none;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #fff, 0 0 0px #2e4d51;
+      transition: transform 0.2s, box-shadow 0.3s;
+      animation: glowBtn 2.5s ease-in-out infinite alternate;
+      max-width: 160px;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #fff;
+    }
+    #bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      object-fit: cover;
+      background: black;
+      transform: translate(-50%, -50%);
+    }
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      display: block;
+    }
+    #ender-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle at 60% 40%, rgba(46,77,81,0.18) 0%, rgba(0,0,0,0) 70%),
+                  radial-gradient(circle at 30% 70%, rgba(46,77,81,0.12) 0%, rgba(0,0,0,0) 80%);
+      animation: enderGradientMove 8s ease-in-out infinite alternate;
+      mix-blend-mode: lighten;
+    }
+    #teleport-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      display: none;
+    }
+    .endermite {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      pointer-events: none;
+      z-index: 20;
+      filter: drop-shadow(0 0 16px #2e4d51) drop-shadow(0 0 32px #2e4d51);
+      transition: transform 1s cubic-bezier(.5,1.5,.5,1), opacity 0.8s;
+      opacity: 1;
+      will-change: transform, opacity;
+      user-select: none;
+    }
+    .bg-enderman {
+      position: absolute;
+      width: 120px; /* default, will be overridden inline */
+      height: auto;
+      pointer-events: auto;
+      filter: drop-shadow(0 0 32px #2e4d51) brightness(1.2) contrast(1.2) saturate(2);
+      opacity: 0.85;
+      transition: transform 0.7s cubic-bezier(.5,1.5,.5,1), opacity 0.5s;
+      will-change: transform, opacity;
+      user-select: none;
+    }
+    #enderdragon {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 3;
+      overflow: visible;
+    }
+    .dragon {
+      position: absolute;
+      width: 240px;
+      height: auto;
+      will-change: transform, opacity;
+      pointer-events: none;
+      opacity: 0;
+      filter: drop-shadow(0 0 32px #2e4d51) drop-shadow(0 0 64px #fff) brightness(1.2) contrast(1.2) saturate(2);
+      transition: opacity 0.5s, filter 0.5s;
+      user-select: none;
+    }
+    @keyframes enderGradientMove {
+      0% {
+        background-position: 60% 40%, 30% 70%;
+      }
+      100% {
+        background-position: 70% 50%, 20% 80%;
+      }
+    }
+    @keyframes floatH1 {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-18px) scale(1.04); }
+    }
+    @keyframes glowBtn {
+      0% { box-shadow: 0 0 15px #fff, 0 0 0px #2e4d51; }
+      100% { box-shadow: 0 0 25px #fff, 0 0 18px #2e4d51; }
+    }
+    #teleport-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      display: none;
+    }
+    body, html, * {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -ms-user-select: none !important;
+      -moz-user-select: none !important;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay loop muted playsinline id="bg-video">
+    <source src="youtube_DBNQG6DY73I_1280x720_h264.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <canvas id="particles" style="z-index:0; position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none;"></canvas>
+  <div id="ender-gradient"></div>
+  <div id="teleport-flash"></div>
+  <div id="endermen-bg"></div>
+  <div id="enderdragon"></div>
+  <h1>My Ender Hub</h1>
+  <p>Hi, I'm Enderyn. I do content creation and i like Minecraft.</p>
+  <div class="social-links" style="text-align:center;">
+    <a href="https://discord.gg/KSBcM8YEJv" target="_blank">Discord</a>
+    <a href="https://www.youtube.com/@EnderynMC" target="_blank">YouTube</a>
+    <a href="https://www.instagram.com/enderlynmc/" target="_blank">Instagram</a>
+    <a href="https://x.com/EnderynMC" target="_blank">X</a>
+    <a href="https://www.tiktok.com/@enderynmc" target="_blank">Tiktok</a>
+    <a href="https://www.patreon.com/Enderyn" target="_blank">Patreon</a>
+  </div>
+  <div id="dino-game-title" style="margin-top:40px;font-size:2rem;color:#fff;text-shadow:0 0 16px #2e4d51,0 0 32px #fff;font-family:'Press Start 2P', 'VT323', monospace;letter-spacing:2px;z-index:2;position:relative;">EnderGame</div>
+  <div id="dino-game" style="z-index:2;position:relative;"></div>
+  <div id="dino-start" style="z-index:3;position:relative;display:block;margin:32px auto 0;font-size:1.5rem;color:#fff;cursor:pointer;font-family:'Press Start 2P', 'VT323', monospace;text-shadow:0 0 12px #2e4d51,0 0 24px #fff;">Click to Start</div>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.opacity = '1';
+    setTimeout(function() {
+      document.body.style.background = 'none';
+    }, 1200);
+  });
+
+  // Endermite spawn on click
+  document.addEventListener('click', function(e) {
+    // Don't spawn on link clicks
+    if (e.target.tagName.toLowerCase() === 'a') return;
+    const endermite = document.createElement('img');
+    endermite.src = 'Endermite.webp';
+    endermite.className = 'endermite';
+    endermite.style.left = (e.clientX - 32) + 'px';
+    endermite.style.top = (e.clientY - 32) + 'px';
+    document.body.appendChild(endermite);
+    // Animate movement and fade out
+    let dx = (Math.random() - 0.5) * 120;
+    let dy = (Math.random() - 0.5) * 120;
+    let rot = (Math.random() - 0.5) * 60;
+    setTimeout(() => {
+      endermite.style.transform = `translate(${dx}px, ${dy}px) rotate(${rot}deg) scale(1.2)`;
+      endermite.style.opacity = '0';
+    }, 20);
+    setTimeout(() => {
+      endermite.remove();
+    }, 1200);
+  });
+
+  // Teleport effect for buttons
+  const flash = document.getElementById('teleport-flash');
+  document.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      flash.style.display = 'block';
+      flash.style.opacity = '1';
+      setTimeout(() => {
+        flash.style.opacity = '0';
+        setTimeout(() => {
+          window.open(link.href, link.target || '_self');
+        }, 200);
+      }, 120);
+    });
+  });
+
+  // Particle animation
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const PARTICLE_COUNT = 100;
+  const SHAPES = ['circle', 'square', 'triangle'];
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push({
+      x: randomBetween(0, canvas.width),
+      y: randomBetween(0, canvas.height),
+      r: randomBetween(2, 6),
+      dx: randomBetween(-0.3, 0.3),
+      dy: randomBetween(-0.3, 0.3),
+      alpha: randomBetween(0.3, 1),
+      shape: SHAPES[Math.floor(Math.random() * SHAPES.length)]
+    });
+  }
+  function drawParticle(p) {
+    ctx.save();
+    ctx.globalAlpha = p.alpha;
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 8;
+    ctx.fillStyle = '#fff';
+    if (p.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+      ctx.fill();
+    } else if (p.shape === 'square') {
+      ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+    } else if (p.shape === 'triangle') {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y - p.r);
+      ctx.lineTo(p.x - p.r, p.y + p.r);
+      ctx.lineTo(p.x + p.r, p.y + p.r);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      drawParticle(p);
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    }
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // Enderman background summoning
+  const endermenImgs = [
+    'Enderman_Screaming.webp',
+    'Enderman_Idle_(Dungeons).webp'
+  ];
+  const endermenBg = document.getElementById('endermen-bg');
+  function summonEnderman() {
+    const img = document.createElement('img');
+    img.src = endermenImgs[Math.floor(Math.random() * endermenImgs.length)];
+    img.className = 'bg-enderman';
+    // Random size
+    const size = Math.floor(Math.random() * 100) + 80; // 80px to 180px
+    img.style.width = size + 'px';
+    img.style.height = 'auto';
+    // Get main content bounding box
+    const contentElems = [document.querySelector('h1'), document.querySelector('p'), ...document.querySelectorAll('a')];
+    let contentRect = null;
+    contentElems.forEach(el => {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      if (!contentRect) contentRect = {...rect};
+      else {
+        contentRect.top = Math.min(contentRect.top, rect.top);
+        contentRect.left = Math.min(contentRect.left, rect.left);
+        contentRect.right = Math.max(contentRect.right, rect.right);
+        contentRect.bottom = Math.max(contentRect.bottom, rect.bottom);
+      }
+    });
+    // Try to find a position not overlapping content
+    let x, y, tries = 0, overlap;
+    do {
+      x = Math.random() * 80 + 10; // 10vw to 90vw
+      y = Math.random() * 60 + 20; // 20vh to 80vh
+      // Convert vw/vh to px
+      const px = x * window.innerWidth / 100;
+      const py = y * window.innerHeight / 100;
+      overlap = false;
+      if (contentRect) {
+        // Enderman size: variable
+        const endermanRect = {left: px, right: px+size, top: py, bottom: py+size};
+        if (!(endermanRect.right < contentRect.left || endermanRect.left > contentRect.right || endermanRect.bottom < contentRect.top || endermanRect.top > contentRect.bottom)) {
+          overlap = true;
+        }
+      }
+      tries++;
+    } while (overlap && tries < 10);
+    img.style.left = x + 'vw';
+    img.style.top = y + 'vh';
+    // Random tilt
+    const angle = (Math.random() - 0.5) * 30; // -15deg to +15deg
+    img.style.transform = `rotate(${angle}deg)`;
+    // Teleport on click
+    img.addEventListener('click', function teleportEnderman(e) {
+      e.stopPropagation();
+      img.style.transition = 'transform 0.3s cubic-bezier(.5,2,.5,1), opacity 0.3s';
+      img.style.transform += ' scale(1.4) translateY(-120px)';
+      img.style.opacity = '0';
+      img.style.filter = 'blur(8px) drop-shadow(0 0 64px #fff)';
+      setTimeout(() => img.remove(), 350);
+    });
+    endermenBg.appendChild(img);
+    // Remove after 10s if not clicked
+    setTimeout(() => { if (img.parentNode) img.remove(); }, 10000);
+  }
+  // Remove previous interval if present
+  if (window._endermanInterval) clearInterval(window._endermanInterval);
+  window._endermanInterval = setInterval(summonEnderman, 180000);
+
+  // Ender Dragon fly animation
+  const enderdragonDiv = document.getElementById('enderdragon');
+  function flyDragon() {
+    // Play Ender Dragon sound
+    const dragonSound = new Audio('enddragon.mp3');
+    dragonSound.volume = 0.7;
+    dragonSound.play();
+    const dragon = document.createElement('img');
+    dragon.src = 'Ender_Dragon.webp';
+    dragon.className = 'dragon';
+    // Random vertical position (avoid Dino game area: 0-60vh or 80-100vh)
+    let y;
+    do {
+      y = Math.random() * 80;
+    } while (y > 10 && y < 40); // avoid 10vh-40vh (Dino game area)
+    // Angle always slightly to the right (5deg to 25deg)
+    const angle = Math.random() * 20 + 5;
+    // Always from right to left
+    const startX = window.innerWidth + 20;
+    const endX = -260;
+    dragon.style.top = y + 'vh';
+    dragon.style.left = startX + 'px';
+    dragon.style.transform = `rotate(${angle}deg)`;
+    enderdragonDiv.appendChild(dragon);
+    // Fade in
+    setTimeout(() => { dragon.style.opacity = '1'; }, 50);
+    // Fly across (faster: 3s)
+    setTimeout(() => {
+      dragon.style.transition = 'transform 3s linear, opacity 0.5s, filter 0.5s';
+      dragon.style.transform = `translateX(${endX - startX}px) rotate(${angle}deg)`;
+    }, 100);
+    // Fade out and teleport at edge
+    setTimeout(() => {
+      dragon.style.opacity = '0';
+      dragon.style.filter = 'blur(12px) drop-shadow(0 0 64px #fff)';
+    }, 3200);
+    // Remove after animation
+    setTimeout(() => { if (dragon.parentNode) dragon.remove(); }, 3700);
+  }
+  flyDragon();
+  setInterval(flyDragon, 60000);
+
+  // Enhanced Dino Game
+  (function(){
+    const gameDiv = document.getElementById('dino-game');
+    const startDiv = document.getElementById('dino-start');
+    function startGame() {
+      startDiv.style.display = 'none';
+      gameDiv.innerHTML = '<canvas id="dino-canvas" width="600" height="120" style="background:#222;display:block;margin:32px auto 0;border-radius:8px;box-shadow:0 0 24px #2e4d51;"></canvas>';
+      const canvas = document.getElementById('dino-canvas');
+      const ctx = canvas.getContext('2d');
+      let dino = {x: 50, y: 90, vy: 0, jumping: false};
+      let obstacles = [];
+      let score = 0;
+      let gameOver = false;
+      let particles = [];
+      let bestScore = localStorage.getItem('dinoBestScore') ? parseInt(localStorage.getItem('dinoBestScore')) : 0;
+      function reset() {
+        dino = {x: 50, y: 90, vy: 0, jumping: false};
+        obstacles = [];
+        score = 0;
+        gameOver = false;
+        particles = [];
+      }
+      function drawDino() {
+        ctx.save();
+        ctx.shadowColor = '#2e4d51';
+        ctx.shadowBlur = 18;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(dino.x, dino.y, 24, 24);
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#2e4d51';
+        ctx.fillRect(dino.x+16, dino.y+8, 8, 8); // "eye"
+        ctx.restore();
+      }
+      function drawObstacles() {
+        ctx.save();
+        ctx.shadowColor = '#2e4d51';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#2e4d51';
+        for (let o of obstacles) ctx.fillRect(o.x, o.y, o.w, o.h);
+        ctx.restore();
+      }
+      function drawGround() {
+        ctx.save();
+        ctx.strokeStyle = '#2e4d51';
+        ctx.shadowColor = '#2e4d51';
+        ctx.shadowBlur = 10;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(0, 114);
+        ctx.lineTo(600, 114);
+        ctx.stroke();
+        ctx.restore();
+      }
+      function drawParticles() {
+        for (let p of particles) {
+          ctx.save();
+          ctx.globalAlpha = p.a;
+          ctx.fillStyle = '#fff';
+          ctx.shadowColor = '#2e4d51';
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2*Math.PI);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+      function drawScore() {
+        ctx.save();
+        ctx.globalAlpha = 0.7;
+        ctx.font = "14px 'Press Start 2P', monospace";
+        ctx.fillStyle = '#fff';
+        ctx.shadowColor = '#2e4d51';
+        ctx.shadowBlur = 8;
+        ctx.fillText('Score: '+score, 400, 24);
+        ctx.fillText('Best: '+bestScore, 400, 44);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+      let lastObstacleX = 0;
+      let flying = false;
+      document.addEventListener('keydown', function(e){
+        if ((e.code==='Space'||e.keyCode===32) && !gameOver) {
+          flying = true;
+          if (!dino.jumping && dino.y >= 90) dino.jumping = true;
+        } else if ((e.code==='Space'||e.keyCode===32) && gameOver) {
+          reset();
+          update();
+        }
+      });
+      document.addEventListener('keyup', function(e){
+        if (e.code==='Space'||e.keyCode===32) flying = false;
+      });
+      function update() {
+        if (gameOver) return;
+        ctx.clearRect(0, 0, 600, 120);
+        // Dino flying physics
+        if (flying) dino.vy = -3.2;
+        dino.y += dino.vy;
+        dino.vy += 0.35;
+        if (dino.y > 90) { dino.y = 90; dino.vy = 0; dino.jumping = false; }
+        if (dino.y < 0) { dino.y = 0; dino.vy = 0; }
+        // Obstacles (sky or surface, min gap 120px)
+        if ((obstacles.length === 0 || obstacles[obstacles.length-1].x < 600 - 120) && Math.random() < 0.008) {
+          let y;
+          if (Math.random() < 0.5) {
+            y = 10 + Math.random() * 60; // sky
+          } else {
+            y = 100; // surface
+          }
+          obstacles.push({x:600, y:y, w:16+Math.random()*16, h:20+Math.random()*20});
+        }
+        for (let o of obstacles) o.x -= 3;
+        obstacles = obstacles.filter(o => o.x+o.w>0);
+        // Collision (smaller hitbox, always check)
+        for (let o of obstacles) {
+          if (dino.x+18>o.x && dino.x+6<o.x+o.w && dino.y+18>o.y && dino.y<o.y+o.h) gameOver = true;
+        }
+        if (!gameOver) score++;
+        // Particle effect when flying
+        if (flying) {
+          for (let i=0;i<2;i++) {
+            particles.push({x:dino.x+12+Math.random()*8-4, y:dino.y+24, r:2+Math.random()*2, a:0.7+Math.random()*0.3, vy:1+Math.random()*1, vx:(Math.random()-0.5)*1});
+          }
+        }
+        // Update and draw particles (don't go below ground)
+        for (let p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a -= 0.04;
+          if (p.y > 114) p.y = 114;
+        }
+        particles = particles.filter(p => p.a > 0);
+        drawGround();
+        drawDino();
+        drawObstacles();
+        drawParticles();
+        drawScore();
+        if (gameOver) {
+          if (score > bestScore) {
+            bestScore = score;
+            localStorage.setItem('dinoBestScore', bestScore);
+          }
+          ctx.save();
+          ctx.font = "32px 'Press Start 2P', monospace";
+          ctx.fillStyle = '#fff';
+          ctx.shadowColor = '#2e4d51';
+          ctx.shadowBlur = 12;
+          ctx.fillText('Game Over', 140, 70);
+          ctx.font = "18px 'Press Start 2P', monospace";
+          ctx.shadowBlur = 0;
+          ctx.fillText('Press Space to Restart', 80, 100);
+          ctx.restore();
+        } else {
+          requestAnimationFrame(update);
+        }
+      }
+      reset();
+      update();
+    }
+    startDiv.onclick = startGame;
+    // Hide gameDiv until start
+    gameDiv.innerHTML = '';
+  })();
+  </script>
+</body>
+</html>
